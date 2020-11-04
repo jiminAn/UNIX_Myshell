@@ -15,9 +15,9 @@ void revOrder(char *strp[], int num){
 }
 // 문자열 저장 후 해당 문자열 리턴
 char** shortArray(char *str[], int len){
-    char** sarray=(char**)malloc((len + 1) * sizeof(char*));
-    int i=0;
-    for(; i<len; i++)
+    char** sarray = (char**)malloc((len + 1) * sizeof(char*));
+    int i = 0;
+    for(; i < len; i++)
         sarray[i] = str[i];
     
     sarray[i] = NULL;
@@ -101,8 +101,7 @@ void delNode(char *str){
 
         if(it->next == NULL || strcmp(it->next->path, str) != 0)
              fprintf(stderr, "error: path %s not found\n", str);
-        else
-        {
+        else{
             it->next = it->next->next;
             free(it->next);
         }
