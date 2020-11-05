@@ -1,10 +1,11 @@
 #include"support.h"
 
 
-int myexecu(list*);
-void recurPipe(char *argv[],int);
-char* rmspace(char *);
-void welcome_message();
+int myexecu(list*);//각 파이프 라인 handle function
+void recurPipe(char *argv[],int);// 파이프 라인 처리 함수
+char* rmspace(char *); // 문자열의 맨 앞 공백들 제거
+void welcome_message(); // SMUshell 실행 시 웰컴 메세지 출력 함수
+
 
 int main()
 {
@@ -15,6 +16,7 @@ int main()
     char *bspace=" ";
     
     welcome_message();
+    signal(SIGINT, SIG_IGN); // ctrl+c 시그널 무시
   
 
     printf("SMUshell$");
@@ -86,6 +88,7 @@ int main()
         }
     }
 }
+
 // 파이프 라인 처리 함수
 // 이 부분은 아래의 코드를 참고하여 작성하였습니다
 //  http://stackoverflow.com/questions/8389033/implementation-of-multiple-pipes-in-c
@@ -95,7 +98,7 @@ void recurPipe(char *argv[], int count){
     int pipeflag = 0;
     int i,j,k;
     int count2;
-    for(i = 0; i < count; i++)
+    for(i = 0; i < count; i++) // pipe line이 있을 경우 pipeflag 증가
         if(strcmp(argv[i],"|") == 0)
             pipeflag++;
 
@@ -138,6 +141,7 @@ void recurPipe(char *argv[], int count){
     int numPipes = pipeflag;
     int pipefds[2*numPipes];
 
+    // 시작부분에서 parent는 필요한 모든 파이프들을 생성
     for(i = 0; i < (numPipes); i++){
         if(pipe(pipefds + i*2) < 0) {
             perror("couldn't pipe");
@@ -149,18 +153,18 @@ void recurPipe(char *argv[], int count){
         pid = fork();
         if(pid == 0){ // 자식 프로세스 돌아감
             if(arghead->next)
-                // 표준 출력을 pipefds[p*2+1] 인자로 redirection함
+                // 첫 번째 명령어가 아닐 경우에 child는 이전의 명령어로부터 인풋값을 받아옴
                 if(dup2(pipefds[p*2+1],1) < 0)
                     exit(1);
 
             if(p != 0){
-                // 표준 입력을 pipefds[(p-1)*2] 인자로 redirection함
+                // 마지막 명령이 아닌 경우 다음 명령으로 output
                 if(dup2(pipefds[(p-1)*2], 0) < 0){
                     perror(" dup2");
                     exit(1);
                 }
             }
-
+            // parent는 마지막에 모든 복사본을 닫음
             for(i = 0; i < 2*numPipes; i++)
                 close(pipefds[i]);
 
@@ -177,7 +181,7 @@ void recurPipe(char *argv[], int count){
         arghead = arghead->next;
         p++;
     }
-    
+    // parent clost the pipes and wait for children
     for(i = 0; i < 2 * numPipes; i++)
         close(pipefds[i]);
           
@@ -293,10 +297,7 @@ int myexecu(list* top){
     }
     close(fileopen);
     exit(0);
-             
-
-
-
+            
 
 }
 void welcome_message(){
