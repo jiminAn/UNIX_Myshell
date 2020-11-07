@@ -305,10 +305,10 @@ void welcome_message(){
     printf(
 "< %s >\n"
 "\t\t\\\n"
-"\t\t \\   \\_\\_    _/_/         Version 1.0  \n "
+"\t\t \\   \\_\\_    _/_/         Version 1.1  \n "
 "\t\t  \\      \\__/              Author. jimin An \n "
 "\t\t   \\     (oo)\\_______       UNI ID. 201810954  \n "
-"\t\t    \\    (__)\\       )\\/\\    Date. 2020/11/05 \n"
+"\t\t    \\    (__)\\       )\\/\\    Date. 2020/11/07 \n"
 "\t\t             ||----- |\n"
 "\t\t             ||     ||\n",message);
     printf("\n");
