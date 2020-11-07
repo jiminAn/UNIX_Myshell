@@ -1,5 +1,7 @@
 # 유닉스 프로그래밍 프로젝트1 과제
 
+**설명서의 이미지와 함께 보시려면 [여기](https://github.com/jiminAn/UNIX_Myshell/blob/main/document.pdf)를 클릭하세요**
+
 컴퓨터과학과 201810954 안지민
 
 ## 주제 설명
